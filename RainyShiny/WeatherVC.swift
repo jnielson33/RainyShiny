@@ -12,7 +12,7 @@ import Alamofire
 
 
 //When using a tableView, you must always have the UITableViewDelegate and UITableViewDataSource extended in the class.
-class WeatherVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate {
+class WeatherVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     //Links all of the labels and images to the code
     @IBOutlet weak var dateLabel: UILabel!
@@ -23,6 +23,9 @@ class WeatherVC: UIViewController, UITableViewDelegate, UITableViewDataSource, C
     @IBOutlet weak var tableView: UITableView!
     
     var currentWeather = CurrentWeather()
+    var forecast: Forecast!
+    var forecasts = [Forecast]()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,12 +34,39 @@ class WeatherVC: UIViewController, UITableViewDelegate, UITableViewDataSource, C
         tableView.delegate = self
         tableView.dataSource = self
         
+       
         currentWeather = CurrentWeather()
         currentWeather.downloadWeatherDetails {
             
+            self.downloadForecastData() {
+            
             //Setup UI to load downloaded data
             self.updateMainUI()
+                
+            }
+        }
+    }
+
+    
+    func downloadForecastData(completed: @escaping DownloadComplete) {
+        //Downloading forecast weather data for TableView
+        Alamofire.request(FORECAST_URL).responseJSON { response in
+            let result = response.result
             
+            if let dict = result.value as? Dictionary<String, AnyObject> {
+                
+                if let list = dict["list"] as? [Dictionary<String, AnyObject>] {
+                    
+                    for obj in list {
+                        let forecast = Forecast(weatherDict: obj)
+                        self.forecasts.append(forecast)
+                        print(obj)
+                    }
+                    self.forecasts.remove(at: 0)
+                    self.tableView.reloadData()
+                }
+            }
+            completed()
         }
     }
 
@@ -51,14 +81,20 @@ class WeatherVC: UIViewController, UITableViewDelegate, UITableViewDataSource, C
     //This second function specifies how many rows will be in the tableView.
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return 6
+        return forecasts.count
     }
 
     //The third function lets the cell know what information to display. The weatherCell identifer is what I called the cell in the Main.storyboard table view cell.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell", for: indexPath)
         
-        return cell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell", for: indexPath) as? WeatherCell {
+            
+            let forecast = forecasts[indexPath.row]
+            cell.configureCell(forecast: forecast)
+            return cell
+        } else {
+            return WeatherCell()
+        }
     }
     
     func updateMainUI() {
@@ -69,5 +105,6 @@ class WeatherVC: UIViewController, UITableViewDelegate, UITableViewDataSource, C
         currentWeatherImage.image = UIImage(named: currentWeather.weatherType)
     }
 
-}
+ }
+
 

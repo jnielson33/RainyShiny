@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -69,7 +69,7 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.22153273368610904" green="0.68202978743423592" blue="1" alpha="0.68915052816901412" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.22153273370000001" green="0.68202978739999998" blue="1" alpha="0.6891505282" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="por-Y9-afK" secondAttribute="bottom" constant="20" id="7dJ-tz-TGV"/>
                                     <constraint firstAttribute="height" constant="300" id="IdJ-UW-fCW"/>
@@ -81,11 +81,11 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="SIi-Eh-dOS">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="weatherCell" rowHeight="80" id="TQb-I1-Ylq">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="weatherCell" rowHeight="80" id="TQb-I1-Ylq" customClass="WeatherCell" customModule="RainyShiny" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TQb-I1-Ylq" id="hxe-cq-5qJ">
-                                            <frame key="frameInset" width="375" height="80"/>
+                                            <frame key="frameInset" width="375" height="79.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v53-ko-5WG">
@@ -127,7 +127,7 @@
                                                         </stackView>
                                                     </subviews>
                                                 </stackView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XHg-gB-ckJ">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XHg-gB-ckJ">
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="50" id="Pkr-Qh-KO7"/>
                                                         <constraint firstAttribute="height" constant="50" id="cL6-3u-Bwa"/>
@@ -146,6 +146,13 @@
                                                 <constraint firstAttribute="bottomMargin" secondItem="v53-ko-5WG" secondAttribute="bottom" constant="10" id="bgy-gX-Pha"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="dayLabel" destination="Zpa-25-fD0" id="dIi-x5-7XK"/>
+                                            <outlet property="highTemp" destination="OfT-Ca-aQj" id="PRW-Dc-jKN"/>
+                                            <outlet property="lowTemp" destination="hmP-07-2ge" id="nVo-dS-lTx"/>
+                                            <outlet property="weatherIcon" destination="XHg-gB-ckJ" id="DHG-gr-tfm"/>
+                                            <outlet property="weatherType" destination="Fh2-On-nQ1" id="r5v-wV-zcF"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
