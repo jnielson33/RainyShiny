@@ -12,7 +12,7 @@ import Alamofire
 
 
 //When using a tableView, you must always have the UITableViewDelegate and UITableViewDataSource extended in the class.
-class WeatherVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class WeatherVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate {
     
     //Links all of the labels and images to the code
     @IBOutlet weak var dateLabel: UILabel!
@@ -22,13 +22,30 @@ class WeatherVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var currentWeatherTypeLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
+    let locationManager = CLLocationManager()
+    var currentLocation: CLLocation!
+    
+    
+    
     var currentWeather = CurrentWeather()
     var forecast: Forecast!
     var forecasts = [Forecast]()
     
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        locationAuthStatus()
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startMonitoringSignificantLocationChanges()
         
         //these must be declared in order for the tableView information to appear on the screen.
         tableView.delegate = self
@@ -36,20 +53,35 @@ class WeatherVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
        
         currentWeather = CurrentWeather()
-        currentWeather.downloadWeatherDetails {
-            
-            self.downloadForecastData() {
-            
-            //Setup UI to load downloaded data
-            self.updateMainUI()
-                
-            }
-        }
+        
     }
 
+    func locationAuthStatus() {
+        
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            currentLocation = locationManager.location
+            
+            Location.sharedInstance.latitude = currentLocation.coordinate.latitude
+            Location.sharedInstance.longitude = currentLocation.coordinate.longitude
+            currentWeather.downloadWeatherDetails {
+                
+                self.downloadForecastData() {
+                    
+                    //Setup UI to load downloaded data
+                    self.updateMainUI()
+                    
+                }
+            }
+            print(currentLocation.coordinate.latitude, currentLocation.coordinate.longitude)
+        } else {
+            locationManager.requestWhenInUseAuthorization()
+            locationAuthStatus()
+        }
+    }
     
     func downloadForecastData(completed: @escaping DownloadComplete) {
         //Downloading forecast weather data for TableView
+        
         Alamofire.request(FORECAST_URL).responseJSON { response in
             let result = response.result
             
