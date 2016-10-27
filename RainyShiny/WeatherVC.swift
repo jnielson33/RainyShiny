@@ -22,6 +22,8 @@ class WeatherVC: UIViewController, UITableViewDelegate, UITableViewDataSource, C
     @IBOutlet weak var currentWeatherTypeLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var backgroundImage: UIImageView!
+    
     let locationManager = CLLocationManager()
     var currentLocation: CLLocation!
     
@@ -135,6 +137,30 @@ class WeatherVC: UIViewController, UITableViewDelegate, UITableViewDataSource, C
         currentWeatherTypeLabel.text = currentWeather.weatherType
         locationLabel.text = currentWeather.cityName
         currentWeatherImage.image = UIImage(named: currentWeather.weatherType)
+        
+        if currentWeather.weatherType == "Clear" {
+            
+            backgroundImage.image = UIImage(named: "sunny.jpg")
+            
+        }
+        
+        else if currentWeather.weatherType == "Clouds" {
+            
+            backgroundImage.image = UIImage(named: "cloudy.jpg")
+            
+        }
+        
+        else if currentWeather.weatherType == "Rain" {
+            
+            backgroundImage.image = UIImage(named: "rainy.jpg")
+            
+        }
+        
+        else {
+            
+            backgroundImage.image = UIImage(named: "snowy.jpg")
+        }
+        
     }
 
  }
